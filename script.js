@@ -144,24 +144,16 @@ function initContactForm() {
     return valid;
   }
 
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
+  const name = document.getElementById('name').value;
+const email = document.getElementById('email').value;
+const bike = document.getElementById('bike').value;
+const message = document.getElementById('message').value;
 
-    let allValid = true;
-    Object.entries(fields).forEach(([key, field]) => {
-      if (!validateField(key, field)) allValid = false;
-    });
+const text = `Hello Richroy Motors!%0AMy name is ${name}%0AContact: ${email}%0ABike interested in: ${bike}%0AMessage: ${message}`;
 
-    if (!allValid) {
-      showToast('Please fix the highlighted fields.', true);
-      return;
-    }
-
-    // No backend connected yet — this is where a service like
-    // Formspree or EmailJS would receive the submission.
-    showToast('Message sent. We\u2019ll be in touch soon.');
-    form.reset();
-  });
+window.open(`https://wa.me/237652139226?text=${text}`, '_blank');
+showToast('Opening WhatsApp...');
+form.reset();
 }
 
 // ---- Toast notifications ----
