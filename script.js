@@ -151,7 +151,7 @@ const message = document.getElementById('message').value;
 
 const text = `Hello Richroy Motors!%0AMy name is ${name}%0AContact: ${email}%0ABike interested in: ${bike}%0AMessage: ${message}`;
 
-window.open(`https://wa.me/237652139226?text=${text}`, '_blank');
+window.open(`https://wa.me/+237652139226?text=${text}`, '_blank');
 showToast('Opening WhatsApp...');
 form.reset();
 }
