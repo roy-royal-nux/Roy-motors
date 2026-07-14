@@ -1,3 +1,6 @@
+const SUPABASE_URL = 'https://supabase.com/dashboard/project/qosjaysnpyumgjifckhi/settings/general';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFvc2pheXNucHl1bWdqaWZja2hpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM5NTMwNzYsImV4cCI6MjA5OTUyOTA3Nn0.Zg8xXSNs16_igOHrP4bAT8MT0tMjVU_SMRWPv3aEQSs';
+
 // ============================================
 // RICHROY MOTORS — Site Interactivity
 // ============================================
@@ -176,3 +179,51 @@ function showToast(message, isError = false) {
     toast.classList.remove('show');
   }, 3200);
 }
+
+// ---- Fetch bikes from Supabase ----
+async function loadBikes() {
+  const grid = document.getElementById('bikesGrid');
+  
+  try {
+    const response = await fetch(
+      `${SUPABASE_URL}/rest/v1/bikes?select=*&order=id.asc`,
+      {
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`
+        }
+      }
+    );
+
+    const bikes = await response.json();
+
+    if (!bikes.length) {
+      grid.innerHTML = '<p class="loading">No bikes available right now.</p>';
+      return;
+    }
+
+    grid.innerHTML = bikes.map(bike => `
+      <article class="bike-card is-visible">
+        <div class="bike-image" style="background: linear-gradient(135deg, #0B2A4A, #1B4570 75%)"></div>
+        <div class="price-tag">From <strong>${bike.price.toLocaleString()}</strong> FCFA</div>
+        <div class="bike-body">
+          <span class="bike-brand">${bike.brand}</span>
+          <h3>${bike.model}</h3>
+          <ul class="bike-specs">
+            <li>${bike.cc}</li>
+            <li>${bike.transmission}</li>
+            <li>${bike.start_type}</li>
+          </ul>
+          <p class="bike-note">${bike.note}</p>
+        </div>
+      </article>
+    `).join('');
+
+  } catch (error) {
+    grid.innerHTML = '<p class="loading">Failed to load bikes. Please try again.</p>';
+    console.error('Supabase error:', error);
+  }
+}
+
+// Call it on page load
+document.addEventListener('DOMContentLoaded', loadBikes);
